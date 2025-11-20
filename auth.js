@@ -56,8 +56,12 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
             // SALVA O TOKEN NO NAVEGADOR (CHAVE DE SEGURANÇA)
             localStorage.setItem('authToken', data.data.session.access_token);
             
-            // Redireciona para a próxima tela (RF07)
-            window.location.href = 'dashboard.html'; 
+            // VERIFICA SE É O PROFISSIONAL (ADMIN)
+            if (data.data.user.email === 'admin@marido.com') {
+                window.location.href = 'painel-profissional.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
         } else {
             alert('❌ Login falhou. Credenciais inválidas.');
         }

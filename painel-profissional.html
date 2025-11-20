@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Profissional</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="container header" style="background-color: #2c3e50;">
+        <h1 style="color: white;">👷 Área do Profissional</h1>
+        <button id="btn-logout" class="btn secondary">Sair</button>
+    </header>
+
+    <div id="lista-geral" class="container list-container">
+        <p>Carregando todos os chamados...</p>
+    </div>
+
+    <script>
+        const API_URL = 'https://seu-backend.onrender.com'; // USE SUA URL DO RENDER
+        const token = localStorage.getItem('authToken');
+
+        if (!token) window.location.href = 'index.html';
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.href = 'index.html';
+        });
+
+        async function carregarTudo() {
+            const listaDiv = document.getElementById('lista-geral');
+            
+            const response = await fetch(`${API_URL}/todos-os-chamados`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const chamados = await response.json();
+                listaDiv.innerHTML = '';
+                chamados.forEach(chamado => {
+                    listaDiv.innerHTML += `
+                        <div class="card">
+                            <h3>${chamado.titulo}</h3>
+                            <p><strong>Cliente ID:</strong> ${chamado.usuario_id}</p>
+                            <p>${chamado.descricao}</p>
+                            <hr>
+                            <button class="btn primary">Aceitar Serviço</button>
+                        </div>
+                    `;
+                });
+            } else {
+                alert('Acesso negado! Você não é o admin.');
+                window.location.href = 'dashboard.html';
+            }
+        }
+        carregarTudo();
+    </script>
+</body>
+</html>
