@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marido de Aluguel - Login</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <h1>🛠️ Área de Cliente</h1>
+
+    <div class="form-container">
+        <h2>Novo Cliente</h2>
+        <form id="form-cadastro">
+            <input type="text" id="nome-cad" placeholder="Seu Nome" required>
+            <input type="email" id="email-cad" placeholder="E-mail" required>
+            <input type="password" id="senha-cad" placeholder="Senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <div class="form-container">
+        <h2>Já sou Cliente</h2>
+        <form id="form-login">
+            <input type="email" id="email-log" placeholder="E-mail" required>
+            <input type="password" id="senha-log" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
