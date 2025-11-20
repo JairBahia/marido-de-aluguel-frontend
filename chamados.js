@@ -1,149 +1,124 @@
-// chamados.js
+// chamados.js (VERSÃO CORRIGIDA E BLINDADA)
 
-const API_URL = 'https://marido-de-aluguel-backend.onrender.com'; 
-
-// ----------------------------------------
-// 1. VERIFICAÇÃO DE SEGURANÇA E SETUP
-// ----------------------------------------
-
+const API_URL = 'https://marido-de-aluguel-backend.onrender.com'; // Certifique-se que esta é sua URL do Render
 const token = localStorage.getItem('authToken');
 
-// Se não houver token, redireciona imediatamente (RF02)
-if (!token) {
-    alert('Sessão expirada. Faça login novamente.');
+// 1. VERIFICAÇÃO DE SEGURANÇA
+// Se não tem token e não está na tela de login, chuta para fora
+if (!token && !document.getElementById('form-login')) {
     window.location.href = 'index.html';
 }
 
 const headers = {
     'Content-Type': 'application/json',
-    // Header Authorization é obrigatório para todas as rotas protegidas (RF05)
-    'Authorization': `Bearer ${token}` 
+    'Authorization': `Bearer ${token}`
 };
 
-// --- Função de Logout ---
-document.getElementById('btn-logout').addEventListener('click', () => {
-    localStorage.removeItem('authToken'); // Remove a chave
-    window.location.href = 'index.html';
-});
-
-// ----------------------------------------
-// 2. FUNÇÃO DE LISTAGEM (RF04 - READ)
-// ----------------------------------------
-
-async function carregarChamados() {
-    const listaDiv = document.getElementById('lista-chamados');
-    listaDiv.innerHTML = '<p>Buscando dados no servidor...</p>';
-
-    try {
-        const response = await fetch(`${API_URL}/chamados`, {
-            method: 'GET',
-            headers: headers // Envia o token para buscar APENAS os meus chamados
-        });
-        
-        const chamados = await response.json();
-        listaDiv.innerHTML = ''; // Limpa antes de renderizar
-
-        if (response.ok) {
-            if (chamados.length === 0) {
-                listaDiv.innerHTML = '<p>Nenhum chamado registrado. Clique em "Abrir Novo Chamado" para começar.</p>';
-                return;
-            }
-            
-            // Renderiza a lista (RNF01)
-            chamados.forEach(chamado => {
-                const chamadoDiv = document.createElement('div');
-                chamadoDiv.className = 'chamado-card';
-                chamadoDiv.innerHTML = `
-                    <h3>${chamado.titulo} (#${chamado.id})</h3>
-                    <p>Status: <strong>${chamado.status.toUpperCase()}</strong></p>
-                    <p>${chamado.descricao.substring(0, 100)}...</p>
-                    <small>Criado em: ${new Date(chamado.created_at).toLocaleDateString()}</small>
-                    <button class="btn-excluir" data-id="${chamado.id}">Excluir</button>
-                `;
-                listaDiv.appendChild(chamadoDiv);
-            });
-        } else if (response.status === 401) {
-            alert('Acesso negado. Refaça o login.');
-            window.location.href = 'index.html';
-        } else {
-            listaDiv.innerHTML = `<p>Erro (${response.status}) ao carregar: ${chamados.error}</p>`;
-        }
-    } catch (error) {
-        listaDiv.innerHTML = '<p>Erro: Não foi possível conectar ao Back-end (Verifique se o Node está rodando).</p>';
-        console.error('Erro de rede:', error);
-    }
+// -------------------------------------------------------
+// LÓGICA 1: LOGOUT (Verifica se o botão existe antes de usar)
+// -------------------------------------------------------
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = 'index.html';
+    });
 }
 
-// ----------------------------------------
-// 3. LÓGICA DE EXCLUSÃO (RF03 - DELETE)
-// ----------------------------------------
+// -------------------------------------------------------
+// LÓGICA 2: LISTAGEM E EXCLUSÃO (Só roda no Dashboard)
+// -------------------------------------------------------
+const listaChamados = document.getElementById('lista-chamados');
 
-document.getElementById('lista-chamados').addEventListener('click', async (e) => {
-    if (e.target.classList.contains('btn-excluir')) {
-        const chamadoId = e.target.dataset.id;
-        
-        if (!confirm(`Tem certeza que deseja excluir o chamado #${chamadoId}?`)) return;
+if (listaChamados) {
+    async function carregarChamados() {
+        listaChamados.innerHTML = '<p>Buscando dados no servidor...</p>';
 
         try {
-            const response = await fetch(`${API_URL}/chamados/${chamadoId}`, {
-                method: 'DELETE',
+            const response = await fetch(`${API_URL}/chamados`, {
+                method: 'GET',
                 headers: headers
             });
             
+            const chamados = await response.json();
+            listaChamados.innerHTML = ''; 
+
             if (response.ok) {
-                alert(`Chamado #${chamadoId} excluído com sucesso.`);
-                carregarChamados(); // Recarrega a lista
+                if (chamados.length === 0) {
+                    listaChamados.innerHTML = '<p>Nenhum chamado registrado.</p>';
+                    return;
+                }
+                
+                chamados.forEach(chamado => {
+                    const statusClass = chamado.status === 'aberto' ? 'status-open' : 'status-closed';
+                    listaChamados.innerHTML += `
+                        <div class="card chamado-card">
+                            <h3>${chamado.titulo} <small>(#${chamado.id})</small></h3>
+                            <p>Status: <span class="${statusClass}">${chamado.status.toUpperCase()}</span></p>
+                            <p>${chamado.descricao}</p>
+                            <button class="btn delete-btn" data-id="${chamado.id}">Excluir</button>
+                        </div>
+                    `;
+                });
             } else {
-                alert(`Falha ao excluir. Talvez o chamado não exista mais.`);
+                listaChamados.innerHTML = `<p>Erro ao carregar: ${chamados.error}</p>`;
             }
         } catch (error) {
-            console.error('Erro na exclusão:', error);
-            alert('Erro de conexão ao tentar excluir.');
+            listaChamados.innerHTML = '<p>Erro de conexão com o servidor.</p>';
         }
     }
-});
 
+    // Listener para excluir (Event Delegation)
+    listaChamados.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const id = e.target.dataset.id;
+            if (!confirm('Tem certeza que deseja excluir?')) return;
 
-// 4. INICIALIZA A CARGA DE DADOS
-if (token) {
+            try {
+                const res = await fetch(`${API_URL}/chamados/${id}`, {
+                    method: 'DELETE',
+                    headers: headers
+                });
+                if (res.ok) carregarChamados();
+                else alert('Erro ao excluir.');
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
+
+    // Inicia a listagem
     carregarChamados();
 }
 
-// ----------------------------------------
-// LÓGICA DE CRIAÇÃO DE CHAMADO (RF03 - CREATE)
-// ----------------------------------------
-
+// -------------------------------------------------------
+// LÓGICA 3: CRIAÇÃO (Só roda no Novo Chamado)
+// -------------------------------------------------------
 const formNovoChamado = document.getElementById('form-novo-chamado');
 
 if (formNovoChamado) {
-    // Apenas tenta adicionar o listener se o formulário existir na página
     formNovoChamado.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const titulo = document.getElementById('titulo-chamado').value;
         const descricao = document.getElementById('descricao-chamado').value;
 
-        // Se o token não existir por algum motivo (erro de navegação), ele para aqui
-        if (!token) return alert('Sessão inválida. Retorne ao login.');
-        
         try {
             const response = await fetch(`${API_URL}/chamados`, {
                 method: 'POST',
-                headers: headers, // Reutiliza os headers (token e Content-Type)
+                headers: headers,
                 body: JSON.stringify({ titulo, descricao })
             });
 
-            const data = await response.json();
-
             if (response.ok) {
-                alert('Chamado criado com sucesso! Você será redirecionado.');
-                window.location.href = 'dashboard.html'; // Volta para a listagem
+                alert('✅ Chamado criado com sucesso!');
+                window.location.href = 'dashboard.html';
             } else {
-                alert(`Erro ao criar chamado: ${data.error || 'Verifique sua conexão.'}`);
+                const data = await response.json();
+                alert(`Erro: ${data.error}`);
             }
         } catch (error) {
-            console.error('Erro na criação:', error);
-            alert('Erro de conexão com o servidor.');
+            alert('Erro de conexão ao criar chamado.');
         }
     });
 }
