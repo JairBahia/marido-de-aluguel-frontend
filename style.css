@@ -1,0 +1,178 @@
+/* style.css - Tema Marido de Aluguel Pro */
+
+:root {
+    --primary-color: #0f4c81;   /* Azul Profissional */
+    --secondary-color: #f5a623; /* Laranja Ferramenta */
+    --bg-color: #f4f7f6;        /* Fundo claro */
+    --card-bg: #ffffff;         /* Fundo dos cards */
+    --text-color: #333333;
+    --danger-color: #e74c3c;    /* Vermelho para excluir/sair */
+    --success-color: #27ae60;   /* Verde para sucesso */
+    --border-radius: 8px;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Layout Geral --- */
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+header.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* --- Formulários e Cards --- */
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    border-left: 5px solid var(--primary-color); /* Detalhe lateral */
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* --- Inputs --- */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* --- Botões --- */
+button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.2s, opacity 0.2s;
+    width: 100%; /* Botões ocupam largura total nos forms */
+}
+
+header button, .chamado-card button {
+    width: auto; 
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.btn.primary, button[type="submit"] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn.secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+#btn-logout, .delete-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* --- Lista de Chamados --- */
+.chamado-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+
+.chamado-card h3 {
+    margin: 0;
+    text-align: left;
+    color: var(--secondary-color);
+}
+
+.status-open {
+    background-color: #e1f5fe;
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+small {
+    color: #777;
+    font-size: 0.85rem;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 600px) {
+    header.header {
+        flex-direction: column;
+        text-align: center;
+    }
+    header div {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+    header button {
+        flex: 1;
+    }
+}
