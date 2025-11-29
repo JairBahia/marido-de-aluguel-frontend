@@ -1,9 +1,8 @@
-// auth.js
-// URL do seu Back-end (rodando localmente na porta 3000)
+
 const API_URL = 'https://marido-de-aluguel-backend.onrender.com'; 
 
 // ----------------------------------------
-// Lógica de Cadastro (RF01)
+// Lógica de Cadastro
 // ----------------------------------------
 document.getElementById('form-cadastro').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -23,7 +22,6 @@ document.getElementById('form-cadastro').addEventListener('submit', async (e) =>
         
         if (response.ok) {
             alert('✅ Cadastro efetuado! Faça seu login.');
-            // Opcional: Limpar formulário ou focar no login
         } else {
             alert(`❌ Erro no cadastro: ${data.error || 'Verifique os dados.'}`);
         }
@@ -35,7 +33,7 @@ document.getElementById('form-cadastro').addEventListener('submit', async (e) =>
 
 
 // ----------------------------------------
-// Lógica de Login (RF02 - CRUCIAL)
+// Lógica de Login
 // ----------------------------------------
 document.getElementById('form-login').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -53,7 +51,7 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok && data.data.session) {
-            // SALVA O TOKEN NO NAVEGADOR (CHAVE DE SEGURANÇA)
+
             localStorage.setItem('authToken', data.data.session.access_token);
             
             // VERIFICA SE É O PROFISSIONAL (ADMIN)

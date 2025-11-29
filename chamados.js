@@ -1,10 +1,8 @@
-// chamados.js (VERSÃO CORRIGIDA E BLINDADA)
-
 const API_URL = 'https://marido-de-aluguel-backend.onrender.com'; // Certifique-se que esta é sua URL do Render
 const token = localStorage.getItem('authToken');
 
-// 1. VERIFICAÇÃO DE SEGURANÇA
-// Se não tem token e não está na tela de login, chuta para fora
+
+
 if (!token && !document.getElementById('form-login')) {
     window.location.href = 'index.html';
 }
@@ -15,7 +13,7 @@ const headers = {
 };
 
 // -------------------------------------------------------
-// LÓGICA 1: LOGOUT (Verifica se o botão existe antes de usar)
+//LOGOUT - Verifica se o botão existe antes de usar
 // -------------------------------------------------------
 const btnLogout = document.getElementById('btn-logout');
 if (btnLogout) {
@@ -26,7 +24,7 @@ if (btnLogout) {
 }
 
 // -------------------------------------------------------
-// LÓGICA 2: LISTAGEM E EXCLUSÃO (Só roda no Dashboard)
+// LISTAGEM E EXCLUSÃO
 // -------------------------------------------------------
 const listaChamados = document.getElementById('lista-chamados');
 
@@ -68,7 +66,7 @@ if (listaChamados) {
         }
     }
 
-    // Listener para excluir (Event Delegation)
+    
     listaChamados.addEventListener('click', async (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const id = e.target.dataset.id;
@@ -92,7 +90,7 @@ if (listaChamados) {
 }
 
 // -------------------------------------------------------
-// LÓGICA 3: CRIAÇÃO (Só roda no Novo Chamado)
+// CRIAÇÃO DE CHAMADO
 // -------------------------------------------------------
 const formNovoChamado = document.getElementById('form-novo-chamado');
 

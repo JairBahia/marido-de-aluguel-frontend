@@ -1,13 +1,13 @@
-/* style.css - Tema Marido de Aluguel Pro (Final) */
+/* Front da Pagina */
 
 :root {
-    --primary-color: #0f4c81;   /* Azul Profissional */
-    --secondary-color: #f5a623; /* Laranja Ferramenta */
-    --bg-color: #f4f7f6;        /* Fundo claro */
-    --card-bg: #ffffff;         /* Fundo dos cards */
+    --primary-color: #0f4c81;   
+    --secondary-color: #f5a623; 
+    --bg-color: #f4f7f6;        
+    --card-bg: #ffffff;         
     --text-color: #333333;
-    --danger-color: #e74c3c;    /* Vermelho para excluir/sair/antes */
-    --success-color: #27ae60;   /* Verde para sucesso/depois */
+    --danger-color: #e74c3c;    
+    --success-color: #27ae60;   
     --border-radius: 8px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -133,7 +133,7 @@ button:hover {
     opacity: 0.9;
 }
 
-/* --- Lista de Chamados (Dashboard) --- */
+/* --- Lista de Chamados  --- */
 .chamado-card {
     display: flex;
     flex-direction: column;
@@ -161,10 +161,10 @@ small {
     font-size: 0.85rem;
 }
 
-/* --- ESTILOS ESPECIAIS DO PORTFÓLIO (ANTES E DEPOIS) --- */
+/* --- ESTILOS DO PORTFÓLIO --- */
 
 .portfolio-item {
-    margin-bottom: 40px; /* Espaço entre um serviço e outro */
+    margin-bottom: 40px; 
 }
 
 .portfolio-title {
@@ -176,7 +176,6 @@ small {
     padding-bottom: 5px;
 }
 
-/* Container flexível para as duas fotos */
 .antes-depois-container {
     display: flex;       
     gap: 20px;           
@@ -188,7 +187,7 @@ small {
     text-align: center; 
 }
 
-/* Labels "Antes" e "Depois" */
+/* Labels */
 .img-block span {
     display: block;
     font-weight: bold;
@@ -207,7 +206,7 @@ small {
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow);
-    height: 200px; /* Altura fixa para alinhar */
+    height: 200px; 
     border: 1px solid #ddd;
 }
 
@@ -215,13 +214,13 @@ small {
 .portfolio-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Corta o excesso para preencher o quadrado */
+    object-fit: cover; 
     display: block;
-    transition: transform 0.3s; /* Efeito suave ao passar mouse */
+    transition: transform 0.3s; 
 }
 
 .portfolio-img-box img:hover {
-    transform: scale(1.05); /* Zoom suave */
+    transform: scale(1.05); 
 }
 
 /* Feedbacks */
@@ -231,7 +230,7 @@ small {
 }
 
 .feedback-item small {
-    color: #f1c40f; /* Estrelas amarelas */
+    color: #f1c40f; 
     font-size: 1.1rem;
 }
 
@@ -252,7 +251,7 @@ small {
         flex: 1;
     }
 
-    /* Faz as imagens ficarem uma embaixo da outra no celular */
+    
     .antes-depois-container {
         flex-direction: column;
     }
